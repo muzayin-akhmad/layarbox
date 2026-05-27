@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Konfirmasi Pembayaran</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background:#0f172a;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      padding:20px;
+      color:white;
+    }
+
+    .container{
+      background:#1e293b;
+      width:100%;
+      max-width:420px;
+      padding:30px;
+      border-radius:16px;
+      box-shadow:0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1{
+      font-size:24px;
+      margin-bottom:10px;
+    }
+
+    p{
+      color:#cbd5e1;
+      margin-bottom:25px;
+      line-height:1.5;
+    }
+
+    .input-group{
+      margin-bottom:18px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-size:14px;
+    }
+
+    input{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:10px;
+      background:#334155;
+      color:white;
+      font-size:15px;
+    }
+
+    input::placeholder{
+      color:#94a3b8;
+    }
+
+    button{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:10px;
+      background:#2563eb;
+      color:white;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    button:hover{
+      background:#1d4ed8;
+    }
+
+    .success{
+      display:none;
+      margin-top:20px;
+      text-align:center;
+      color:#4ade80;
+      font-size:14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Konfirmasi Pembayaran</h1>
+
+    <p>
+      Pembayaran berhasil ✅<br>
+      Silakan isi data berikut untuk mendapatkan akses channel.
+    </p>
+
+    <form id="confirmForm">
+
+      <div class="input-group">
+        <label>Nama</label>
+        <input type="text" id="nama" placeholder="Masukkan nama" required>
+      </div>
+
+      <div class="input-group">
+        <label>Username Telegram</label>
+        <input type="text" id="telegram" placeholder="@username" required>
+      </div>
+
+      <button type="submit">
+        Kirim Konfirmasi
+      </button>
+
+      <div class="success" id="successMessage">
+        ✅ Konfirmasi berhasil dikirim ke admin.
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    const BOT_TOKEN = "8689269132:AAGnY3LZLwyo5wIXq85nYlN1MNkWRhEdSn4";
+    const CHAT_ID = "@layardrama_admin";
+
+    document.getElementById("confirmForm").addEventListener("submit", async function(e){
+
+      e.preventDefault();
+
+      const nama = document.getElementById("nama").value;
+      const telegram = document.getElementById("telegram").value;
+
+      const message = `
+📥 KONFIRMASI PEMBAYARAN BARU
+
+👤 Nama : ${nama}
+📱 Telegram : ${telegram}
+      `;
+
+      try{
+
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            chat_id: CHAT_ID,
+            text: message
+          })
+        });
+
+        document.getElementById("successMessage").style.display = "block";
+
+        document.getElementById("confirmForm").reset();
+
+      }catch(error){
+
+        alert("Gagal mengirim konfirmasi.");
+
+      }
+
+    });
+  </script>
+
+</body>
+</html>
